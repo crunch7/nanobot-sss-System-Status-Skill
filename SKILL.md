@@ -46,6 +46,6 @@ Shell脚本 (`sss.sh`) 支持 `--mode` 参数：
 ## Notes
 - **跨平台支持**: Windows / Linux / macOS
 - 进程数量限制为 5 条，保持输出简洁
-- 输出包含颜色编码的警告级别（Windows PowerShell 和 Linux/macOS Bash）
+- 输出为纯文本，便于程序捕获和解析
 - Python 实现 (`__init__.py`) 使用适配器模式，消除了平台重复代码，更易维护
 - Shell 脚本 (`sss.sh`) 支持模式参数，可单独检查某一资源

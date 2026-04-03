@@ -5,13 +5,6 @@
 
 set -euo pipefail
 
-# 颜色定义
-RED='\033[0;31m'
-YELLOW='\033[1;33m'
-GREEN='\033[0;32m'
-CYAN='\033[0;36m'
-NC='\033[0m' # No Color
-
 # 默认模式
 MODE="all"
 
@@ -46,7 +39,7 @@ is_macos() {
 # ========== 内存检查 ==========
 
 check_memory() {
-    echo -e "${CYAN}=== Memory Usage Report ===${NC}"
+    echo "=== Memory Usage Report ==="
 
     if is_macos; then
         # macOS: 使用 vm_stat
@@ -98,19 +91,10 @@ check_memory() {
     echo "Total Memory: $TOTAL_GB GB"
     echo "Used: $USED_GB GB"
     echo "Available: $FREE_GB GB"
-
-    # 设置颜色
-    USAGE_INT=$(echo "$USAGE_PCT" | cut -d'.' -f1)
-    if [ "$USAGE_INT" -gt 80 ]; then
-        echo -e "Usage: ${RED}$USAGE_PCT %${NC}"
-    elif [ "$USAGE_INT" -gt 70 ]; then
-        echo -e "Usage: ${YELLOW}$USAGE_PCT %${NC}"
-    else
-        echo -e "Usage: ${GREEN}$USAGE_PCT %${NC}"
-    fi
+    echo "Usage: $USAGE_PCT %"
 
     echo ""
-    echo -e "${CYAN}=== Top 5 Memory Processes ===${NC}"
+    echo "=== Top 5 Memory Processes ==="
 
     if is_macos; then
         # macOS
@@ -120,7 +104,7 @@ check_memory() {
     fi
 
     echo ""
-    echo -e "${CYAN}=== Anomaly Detection ===${NC}"
+    echo "=== Anomaly Detection ==="
     HIGH_MEM_COUNT=0
     if is_macos; then
         ps aux | awk '$10 > 500000 {print $11 ": " $10/1024 " MB"; HIGH_MEM_COUNT++}'
@@ -129,11 +113,11 @@ check_memory() {
     fi
 
     if [ "$HIGH_MEM_COUNT" -eq 0 ]; then
-        echo -e "${GREEN}No single process using >500MB${NC}"
+        echo "No single process using >500MB"
     fi
 
     echo ""
-    echo -e "${CYAN}=== Suggestions ===${NC}"
+    echo "=== Suggestions ==="
     echo "1. If memory usage >80%, close unnecessary programs"
     echo "2. Check for unknown processes"
     echo "3. Use system monitor for details (htop, top, Activity Monitor)"
@@ -143,7 +127,7 @@ check_memory() {
 # ========== CPU 检查 ==========
 
 check_cpu() {
-    echo -e "${CYAN}=== CPU Usage Report ===${NC}"
+    echo "=== CPU Usage Report ==="
 
     if is_macos; then
         # macOS: 使用 top
@@ -165,7 +149,7 @@ check_cpu() {
     echo "Logical Cores: $CORES"
     echo ""
 
-    echo -e "${CYAN}=== Top 5 CPU Processes ===${NC}"
+    echo "=== Top 5 CPU Processes ==="
 
     if is_macos; then
         ps aux -r -o pid,user,%cpu,comm | head -n 6
@@ -174,7 +158,7 @@ check_cpu() {
     fi
 
     echo ""
-    echo -e "${CYAN}=== Suggestions ===${NC}"
+    echo "=== Suggestions ==="
     echo "1. If CPU usage >80%, check for runaway processes"
     echo "2. Use 'top' or 'htop' to identify high CPU processes"
     echo "3. Consider upgrading CPU if consistently high"
@@ -184,7 +168,7 @@ check_cpu() {
 # ========== 磁盘检查 ==========
 
 check_disk() {
-    echo -e "${CYAN}=== Disk Usage Report ===${NC}"
+    echo "=== Disk Usage Report ==="
 
     if df -h 2>/dev/null | head -1 >/dev/null; then
         df -h
@@ -194,7 +178,7 @@ check_disk() {
     fi
 
     echo ""
-    echo -e "${CYAN}=== Suggestions ===${NC}"
+    echo "=== Suggestions ==="
     echo "1. Clean up temporary files if disk >90%"
     echo "2. Move large files to external storage"
     echo "3. Use 'du -sh *' to find large directories"
